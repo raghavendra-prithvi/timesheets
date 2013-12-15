@@ -1,0 +1,288 @@
+<!--This page is to edit your petition form once you have created it... OR to add votes to petitions that have PASSED -->
+
+<% provide :title do  %>
+	<%= @petition.name.html_safe %>
+<%end%>
+
+<h1><%= @petition.name.html_safe  %>  </h1>
+
+
+<!--Petitions that have PASSED are below -->
+
+<% if @petition.pass == "pass"%>
+
+	<!-- DESCRIPTION --!>
+	<h4 id="left">Description</h4>
+	<div class="span4", id="formsy2">
+		<%= image_tag(@petition.pics_url) %>
+	</div>
+	<%= @petition.description.html_safe %>
+
+	<!-- LINKS --!>
+
+
+<input type="button" value="View References" id="toggle_code" class="btn btn-link"/>
+
+<div class="highlight">
+	<div class="wid">
+	<h4 id="left">References</h4>
+	<%= @petition.links.html_safe  %>
+	</div>
+</div>
+
+	<div id="bar2"></div>
+
+<script>
+$(function(){
+    $('.highlight').hide()
+	$('#toggle_code').click(function(){
+        $('.highlight').toggle({});
+				if ($('#toggle_code').val() == "View References") {
+			$(this).val("Hide References");
+		}
+		else {
+			$(this).val("View References");
+		}
+    });
+});
+</script>
+
+
+
+
+
+
+	<!-- CAMPAIGN GOALS --!>
+	<h4 id="left">Campaign Goals</h4>
+	<%= @petition.demands.html_safe %>
+
+	<!--VOTE FORM BELOW-->
+
+		<% if signed_in? %>
+			<% if @user.votesleft != 0 %>
+				<%= form_for(@petition) do |f| %>
+					<div class="centers">
+						<%= f.submit "Vote for this campaign", class: "btn btn-large btn-primary" %>
+					</div>
+				<% end %>
+			<% end %>
+			<% if @user.votesleft == 0 %>
+				<div class="centers"><div class="btn btn-large btn-info">Thanks for voting!</div></div>
+			<% end %>
+		<% end %>
+
+		<div class="row">
+			<% if !signed_in? %>
+				<div class="centers"><%= link_to "Sign in to vote", signin_path, class: "btn btn-large btn-primary" %></div>
+			<% end %>
+			<div id='fb-root'></div>
+    <script src='http://connect.facebook.net/en_US/all.js'></script>
+    <p><a onclick='postToFeed(); return false;' style="position:absolute">Post to Feed</a></p>
+    <p id='msg'></p>
+
+		</div>
+
+
+
+
+		<!--PRODUCTS for sale IN THE BLOCKSIT.JS THING-->
+
+
+		<% if @prod %>
+		<div id="bar2"></div>
+		<h4 id="left">Related Products</h4>
+		<div id="container3", class="contained">
+			<% @items.each do |item| %>
+				<% if item.launched == "yes" %>
+					<!--  if (item.home == @petition.petition_type.home) || (item.fun == @petition.petition_type.fun) ||(item.book == @petition.petition_type.book) ||(item.fitness == @petition.petition_type.fitness)
+					--!>
+					<% if item.petition_id == @petition.id %>
+						<div class="block">
+							<div class="imgholder">
+								<%= link_to image_tag(item.pictures_url), edit_item_path(:id => item.id)  %> <br />
+							</div>
+							<strong>
+								<%= link_to item.name, edit_item_path(:id => item.id)	, {:style=>'color:#000000;'} %>
+							</strong>
+							<div class="meta">
+								<%= item.cost.to_f/100 %> $
+							</div>
+						</div>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+		<% end %>
+
+	<div id="bar2"></div>
+
+
+
+	<!--MICROPOSTS BELOW-->
+
+	<input type="button" value="View Comments" id="toggle_code2" class="btn btn-link"/><br /><br /><br /><br />
+	<div class="highlight2">
+	<section>
+		<div class="span8 offset2" id="padd">
+			<% if @petition.microposts.any? %>
+				<h3 id="padd">Comments (<%= @petition.microposts.count %>)</h3>
+				<ol class="microposts">
+					<%= render 'shared/micropost_form' %>
+					<%= render @microposts %>
+					<%= will_paginate @microposts %>
+				</ol>
+			<% else %>
+				<h3>Post the first comment! </h3>
+				<ol class="microposts">
+					<%= render 'shared/micropost_form' %>
+				</ol>
+			<% end %>
+		</div>
+	</section>
+	</div>
+
+	<script>
+	$(function(){
+		$('.highlight2').hide()
+		$('#toggle_code2').click(function(){
+			$('.highlight2').toggle({});
+					if ($('#toggle_code2').val() == "View Comments") {
+				$(this).val("Hide Comments");
+			}
+			else {
+				$(this).val("View Comments");
+			}
+		});
+	});
+	</script>
+
+
+
+
+<%end%>
+
+
+
+
+
+
+
+
+
+<!--Petitions that have NOT PASSED are below. THE FORM BELOW IS FOR PEOPLE WHO HAVE STARTED A PETITION BUT HAS NOT BEEN PASSED YET -->
+
+<% if signed_in? %>
+	<% if (@petition.user_id == current_user.id) || (current_user.admin?) %>
+		<% if @petition.pass == "no" || (current_user.admin?) %>
+			<% if @petition.pass == "no" %>
+				<h2><div class="totheleft">PREVIEW</div></h2>
+				<h4 id="left">Description</h4>
+				<%= @petition.description.html_safe  %>
+				<h4 id="left">Demands</h4>
+				<%= @petition.demands.html_safe  %>
+				<% if @petition.links.present?  %>
+					<h4 id="left">Links</h4>
+					<%= @petition.links.html_safe  %>
+				<%end%>
+			<%end%>
+			<div id=bar2></div>
+
+			<h2><span>UPDATE CAMPAIGN</span></h2>
+			<%= link_to "Campaign Tips", tips_path, id:"right" %>
+			<%= form_for(@petition) do |f| %>
+				<%= render 'shared/error_messages', object: f.object %>
+				<h4 id="left">Campaign Name<h4 id="left">
+				<%= f.text_field :name %>
+				<h4 id="left">Campaign Description<h4 id="left">
+				<%= render 'shared/text_editor' %>
+				<%= f.text_area :description, class: "span12", id: "wysihtml5-textarea"  %>
+				<h4 id="left">Demands<h4 id="left">
+				<%= render 'shared/text_editor3' %>
+				<%= f.text_area :demands, class: "span12", id: "wysihtml5-textarea3"  %>
+				<h4 id="left">Useful Links<h4 id="left">
+				<%= f.text_area :links, class: "span12", id: "wysihtml5-textarea2"  %>
+
+
+				<%= f.fields_for :petition_type do |builder| %>
+					<%= builder.hidden_field :petitionid, :value => @petition.id %>
+					<%= builder.label :home, "Home?" %>
+					<%= builder.select :home, [['yes','yes'],['no','no']], :value => @petition.petition_type.home %>
+					<%= builder.label :fitness, "Fitness?" %>
+					<%= builder.select :fitness, [['yes','yes'],['no','no']], :value => @petition.petition_type.fitness %>
+					<%= builder.label :food, "Food?" %>
+					<%= builder.select :food, [['yes','yes'],['no','no']], :value => @petition.petition_type.food %>
+					<%= builder.label :fun, "Fun?" %>
+					<%= builder.select :fun, [['yes','yes'],['no','no']], :value => @petition.petition_type.fun %>
+					<%= builder.label :book, "Books?" %>
+					<%= builder.select :book, [['yes','yes'],['no','no']], :value => @petition.petition_type.book %>
+				<% end %>
+
+
+
+
+
+				<div class="centers">
+					<%= submit_tag "Complete!", :name => 'done', class: "btn btn-large btn-primary" %>
+					<%= submit_tag "Save", :name => 'almostdone', class: "btn btn-large btn-primary" %>
+					<% if current_user.admin? %>
+						<%= f.file_field :pics %>
+						<%= link_to "delete", @petition, method: :delete,
+												  data: { confirm: "You sure?" }, class: "btn btn-large btn-primary" %>
+											  <%= f.label :pass %>
+						<%= f.text_field :pass %>
+					<% end %>
+				</div>
+			<% end %>
+		<%end%>
+	<%end%>
+
+
+
+<%end%>
+
+
+
+
+			<!-- THIS IS FOR THE BLOCKSIT.JS...to make images line up nice -->
+
+			<script>
+			/*var editor = new wysihtml5.Editor("wysihtml5-textarea2", { // id of textarea element
+			  toolbar:      "wysihtml5-toolbar2", // id of toolbar element
+			  parserRules:  wysihtml5ParserRules // defined in parser rules set
+			});*/
+			</script>
+			<script>/*var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+			  toolbar:      "wysihtml5-toolbar", // id of toolbar element
+			  parserRules:  wysihtml5ParserRules // defined in parser rules set
+			});*/
+			</script>
+			<script>/*var editor = new wysihtml5.Editor("wysihtml5-textarea3", { // id of textarea element
+			  toolbar:      "wysihtml5-toolbar3", // id of toolbar element
+			  parserRules:  wysihtml5ParserRules // defined in parser rules set
+			});*/
+
+			FB.init({appId: "260799227376971", status: true, cookie: true});
+
+      function postToFeed() {
+
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          redirect_uri: 'http://poll-spark.herokuapp.com/petitions',
+          link: 'http://poll-spark.herokuapp.com/petitions',
+          picture: 'http://poll-spark.herokuapp.com/images/front_page_logo.png',
+          name: 'Change By Five',
+          caption: 'Support Petition',
+          description: 'Vote For this campaign'
+        };
+
+        function callback(response) {
+          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        FB.ui(obj, callback);
+      }
+
+			</script>
+
+

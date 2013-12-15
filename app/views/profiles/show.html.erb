@@ -1,0 +1,39 @@
+<div class= "span12">
+	<h1>Member Profile</h1>
+</div>
+<div class= "span1">
+      <%=  image_tag(@user.gravatar_url) %>
+</div>
+<div class= "span10">
+<p>Profile name: <%= @user.profile_name %></p>
+<p>Member Since: <%= @user.created_at.to_date %></p>
+<p>Last Signed In: <%= @user.last_sign_in_at.to_date %></p>
+</div>
+<div class= "span2">
+    <% if user_signed_in? %>
+    	<% if current_user.id != @user.id %>  
+    		<% if signed_in? %>
+    			<div id="friend-status">
+    				<% if current_user.friends.include?(@user) || current_user.pending_friends.include?(@user) %>
+    					<%= link_to "Edit Friendship", edit_user_friendship_path(friend_id: @user), class: 'btn' %>
+    				<% else %>
+    					<%= link_to "Add Friend", new_user_friendship_path(friend_id: @user), class: 'btn', id:'add-friendship', data: {friend_id: @user.to_param} %>
+    				<% end %>
+    			</div>
+    		<% end %>
+    	<% end %>
+    <% end %>
+</div>
+ 
+    <div class= "span12">
+         <br/>  
+         <br/>
+        <% @photos.each do |photo| %>
+            <div class = "span2">
+                <div class = "thumb_image">
+                    <div  class = "img-polaroid" ><%= link_to image_tag(photo.image_url(:thumb)), photo %></div>
+                </div>
+            </div>
+        <% end %> 
+    </div>                           
+                

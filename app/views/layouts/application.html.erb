@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= full_title(yield(:title)) %></title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+		<!--Stripe.js is a payment tool-->
+		<script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+
+		<%= javascript_include_tag "application" %>
+
+		<%= stylesheet_link_tag    "application", media: "all" %>
+
+		
+
+		<%= csrf_meta_tags %>
+		<%= render 'layouts/shim' %>
+	</head>
+	<div id="holder">
+			
+		<% flash.each do |key, value| %>
+                    <div class="<%= flash_class(key) %>">
+                          <%= value %>
+                    </div>
+              <% end %>
+			<div class="container-fluid" id="body">
+				<div class="row-fluid" id="whitey">
+                                  <%= yield %>
+                                </div>
+                          </div>
+			<%= render 'layouts/footer' %>
+		</div>
+	</body>
+</html>

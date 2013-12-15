@@ -1,0 +1,368 @@
+<!--ADDING SIGNATURES TO LAUNCHED CAMPAIGNS..IF NOT SIGNED IN, HAVE SAME BOX BUT ASK TO SIGN IN-->
+
+
+
+<h1>
+	<span class="orange">1</span> Campaign
+</h1>
+
+
+<% if current_user.present? %>
+	<% if current_user.signer == "yes"%>
+		<div class="textwrap2">
+			Thanks for helping us reach our goal! <br />
+		</div>
+	<% else %>
+		<div class="textwrap2">
+			This campaign is named: <b><% if !@petition.nil? %>
+				<%= @petition.name %>
+				<% end %>
+				</b>. Watch the video below! <br />
+		</div>
+	<% end %>
+<% else %>
+	<div class="textwrap2">
+		This campaign is named: <b><%= @petition.name %></b>. Watch the video below! <br />
+	</div>
+<% end %>
+
+
+
+<!-- VIDEO --!>
+
+<div class="row">
+	<h4>
+		<iframe width="420" height="315" src="http://www.youtube.com/embed/8wXGrzDIcr8" frameborder="0" allowfullscreen></iframe>
+	</h4>
+</div>
+
+<div id="bar2"></div>
+
+<!-- DESCRIPTION
+
+<h4 id="left">Description</h4>
+<div class="span4", id="formsy2">
+	<% if !@petition.nil? %>
+		<%= image_tag(@petition.pics_url) %>
+	<% end %>
+</div>
+<% if !@petition.nil? %>
+	<%= @petition.description.html_safe %>
+<% end %>
+
+--!>
+
+
+<!-- LINKS
+
+<div class="wid">
+<h4 id="left">References</h4>
+<% if !@petition.nil? %>
+<%= @petition.links.html_safe  %>
+<% end %>
+</div>
+<div id="bar2"></div>
+
+ --!>
+
+
+
+<!-- CAMPAIGN GOALS
+<h4 id="left">Goals</h4>
+<% if !@petition.nil? %>
+<%= @petition.demands.html_safe %>
+<% end %>
+--!>
+
+
+<!-- PETITION SIGNATURE BOX updated --!>
+
+
+<% if signed_in? %>
+	<% if @b == "already signed" %>
+	<!--	<h4>Thanks for helping us reach <span id="numchange"></span>! </h4> --!>
+	<% else %>
+		<p class="textwrap2" id="center"><%= pluralize(@totals.total, "signature") %> have been collected!<br />Help us reach <span id="numchange"></span>! </p>
+	<% end %>
+<% else %>
+	<p class="textwrap2" id="center"><%= pluralize(@totals.total, "signature") %> have been collected! <br />Help us reach <span id="numchange"></span>! </p>
+<% end %>
+
+
+
+
+
+<div id="formsy">
+<% if signed_in? %>
+	<% if !(@b == "already signed") %>
+		<%= form_for(@signature, :html => { :class => "sigPad"} ) do |f| %>
+			<%= render 'shared/error_messages', object: f.object %>
+
+			<%= f.hidden_field :user_id, :value => current_user.id %>
+			<%= f.hidden_field :petition_id, :value => @petition.id %>
+
+			<%= f.label :name %>
+			<%= f.text_field :name, :value => current_user.name %>
+
+			<%= f.label :email %>
+			<%= f.text_field :email, :value => current_user.email %>
+
+			<%= f.label :country %>
+			<%= f.text_field :country, :value => current_user.country %>
+
+			<%= f.hidden_field :total, :value => @totals.total + 1 %>
+			<%= f.hidden_field :remember_token, :value => current_user.remember_token %>
+
+			<%= f.hidden_field :signaturepic, :id=>"canvascontent" %>
+				<ul class="sigNav">
+					<li class="drawIt"><a href="#draw-it">Draw your Signature</a></li>
+					<li class="clearButton"><a href="#clear">Clear</a></li>
+				</ul>
+				<div class="sig sigWrapper">
+					<div class="typed"></div>
+					<canvas class="pad" id="canvas" width="400" height="100" value="TEST CANVAS"></canvas>
+				</div>
+			<% if @b == "ok to sign" %>
+				<img id="MyPix" />
+				<!--<textarea  id="signature_pic_data" ></textarea> -->
+				<%= f.text_area :image_data,{:id=>"signature_pic_data", :style=>"display:none;"} %>
+				<input type="button" onclick="putImage()" value="Save Image" />
+				<div class="row">
+
+				<%= f.submit "Participate!", class: "btn btn-large btn-primary", id:"right" %>
+				</div>
+				<div div id="right2" class="small">
+					<%= link_to "I don't support this", {:action => "nope", :controller=>"signatures"}  %>
+				</div>
+			<% end %>
+			<% if @b == "already signed" %>
+				<p>
+					You have already participated in this campaign! Thank you for your participation!
+				</p>
+			<% end %>
+		<% end %>
+	<% end %>
+<% end %>
+
+
+
+<% if @b == "no user" %>
+	<%= form_for(@signature, :html => { :class => "sigPad"} ) do |f| %>
+		<%= f.label :name %>
+		<%= f.text_field :name %>
+
+		<%= f.label :email %>
+		<%= f.text_field :email %>
+
+		<%= f.label :country %>
+		<%= f.text_field :country %>
+
+		<%= f.hidden_field :signaturepic, :id=>"canvascontent" %>
+			<ul class="sigNav">
+				<li class="drawIt"><a href="#draw-it">Draw your Signature</a></li>
+				<li class="clearButton"><a href="#clear">Clear</a></li>
+			</ul>
+			<div class="sig sigWrapper">
+			<div class="typed"></div>
+				<canvas class="pad" id="canvascontent" width="400" height="100"></canvas>
+			</div><br />
+
+		<%= link_to "Please sign in to participate", signin_path, class: "btn btn-large btn-primary" %>
+	<% end %>
+<% end %>
+</div>
+
+
+
+<% if current_user.present? %>
+	<% if current_user.signer == "no"%>
+		<div id="bar2"></div>
+	<% end %>
+<% else %>
+	<div id="bar2"></div>
+<% end %>
+
+<!-- ITEMS --!>
+
+<!--
+<h4 id="left">Related Products</h4>
+
+*All profits we collect will be used to support ongoing campaigns.
+<div id="container3", class="contained">
+	<% @items.each do |item| %>
+		<% if item.launched == "yes" %>
+			<% if item.petition_id == @petition.id %>
+				<div class="block">
+					<div class="imgholder">
+						<%= link_to image_tag(item.pictures_url), edit_item_path(:id => item.id)  %> <br />
+					</div>
+					<strong>
+						<%= link_to item.name, edit_item_path(:id => item.id)	, {:style=>'color:#000000;'} %>
+					</strong>
+					<div class="meta">
+						<%= item.cost.to_f/100 %> $
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+</div>
+<div id="bar2"></div>
+
+ --!>
+<!-- MICROPOSTS --!>
+
+<div id="formsy">
+<input type="button" value="View Comments" id="toggle_code" class="btn btn-link"/><br /><br /><br />
+</div>
+
+
+<div class="highlight">
+<div class="span8 offset2" id="padd">
+
+	<% if @petition.microposts.any? %>
+		<h3 id="padd">Comments (<%= @petition.microposts.count %>)</h3>
+		<ol class="microposts">
+			<%= render 'shared/micropost_form' %>
+			<%= render @microposts %>
+			<%= will_paginate @microposts %>
+		</ol>
+	<% else %>
+		<h3>Post the first comment! </h3>
+		<ol class="microposts">
+			<%= render 'shared/micropost_form' %>
+		</ol>
+	<% end %>
+</div>
+
+</div>
+
+
+<script>
+
+
+
+$(function(){
+    $('.highlight').hide()
+	$('#toggle_code').click(function(){
+        $('.highlight').toggle({});
+				if ($('#toggle_code').val() == "View Comments") {
+			$(this).val("Hide Comments");
+		}
+		else {
+			$(this).val("View Comments");
+		}
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+<!-- SCRIPT FOR SIGNATURE PAD --!>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+	  $('.sigPad').signaturePad({drawOnly:true});
+	  });
+
+	  function putImage() {
+          var canvas1 = document.getElementById("canvas");
+          if (canvas1.getContext) {
+              var ctx = canvas1.getContext("2d");
+              var myImage = canvas1.toDataURL("image/png");
+          }
+          var imageElement = document.getElementById("MyPix");
+          imageElement.src = myImage;
+          $("#signature_pic_data").val(myImage);
+      }
+</script>
+
+
+<script type="text/javascript">
+function checkValues(){
+	var img = document.getElementById("canvas")
+	var crazyDataUrl = img.toDataURL();
+	document.getElementById("canvascontent").src = crazyDataUrl;
+}
+</script>
+
+
+<!-- SCRIPT FOR NUMBER ONLY --!>
+
+
+
+<script type="text/javascript">
+
+function GetNumber(currentnumber, targetnumber){
+	document.getElementById(targetnumber).innerHTML="100000";
+
+	if(currentnumber < 5000){
+		document.getElementById(targetnumber).innerHTML="20,000";
+	}
+	else if (currentnumber >= 5000 && currentnumber < 10000){
+		document.getElementById(targetnumber).innerHTML="35,000";
+	}
+	else if (currentnumber >= 10000 && currentnumber < 50000){
+		document.getElementById(targetnumber).innerHTML="100,000";
+	}
+	else if (currentnumber >= 100000 && currentnumber < 200000){
+		document.getElementById(targetnumber).innerHTML="300,000";
+	}
+	else if (currentnumber >= 200000 && currentnumber < 400000){
+		document.getElementById(targetnumber).innerHTML="500,000";
+	}
+	else if (currentnumber >= 400000 && currentnumber < 800000){
+		document.getElementById(targetnumber).innerHTML="1,000,000";
+	}
+	else if (currentnumber >= 800000 && currentnumber < 1500000){
+		document.getElementById(targetnumber).innerHTML="2,000,000";
+	}
+	else if (currentnumber >= 1500000 && currentnumber < 400000){
+		document.getElementById(targetnumber).innerHTML="5,000,000";
+	}
+	else if (currentnumber >= 4000000 && currentnumber < 8000000){
+		document.getElementById(targetnumber).innerHTML="10,000,000";
+	}
+	else if (currentnumber >= 8000000 && currentnumber < 20000000){
+		document.getElementById(targetnumber).innerHTML="30,000,000";
+	}
+	else if (currentnumber >= 30000000 && currentnumber < 40000000){
+		document.getElementById(targetnumber).innerHTML="50,000,000";
+	}
+	else if (currentnumber >= 40000000 && currentnumber < 80000000){
+		document.getElementById(targetnumber).innerHTML="100,000,000";
+	}
+	else if (currentnumber >= 80000000 && currentnumber < 150000000){
+		document.getElementById(targetnumber).innerHTML="200,000,000";
+	}
+	else if (currentnumber >= 150000000 && currentnumber < 400000000){
+		document.getElementById(targetnumber).innerHTML="400,000,000";
+	}
+}
+
+window.onload=function(){
+	var i = "<%= @totals %>"
+	GetNumber(i,'numchange');
+
+};
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

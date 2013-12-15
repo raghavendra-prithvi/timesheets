@@ -1,0 +1,53 @@
+<% provide :title do  %>
+	<%= '315 Store' %>
+<%end%>
+
+
+<h1>All Items</h1>
+
+<div class="small">*<b>Profits</b> are used to support and promote campaings. Shipping costs are included. Thank you for shopping!</div><br /><br />
+ 
+	<% if signed_in? %>
+		<% if current_user.admin? %>
+			NOT LAUNCHED
+			<div id="container3", class="contained"> 
+				<% @items.each do |item| %>	
+					<% if  item.launched == "no" %>
+						<div class="block">
+							<div class="imgholder">
+								<%= link_to image_tag(item.pictures_url), edit_item_path(:id => item.id)  %> <br />
+							</div>	
+							<strong>
+								<%= link_to item.name, edit_item_path(:id => item.id)	, {:style=>'color:#000000;'} %>
+							</strong>
+							<div class="meta">
+								<%= item.cost.to_f/100 %> $
+							</div> 
+						</div>	
+					<% end %>
+				<%end%>
+			</div>
+		<%end%>
+	
+	<% if current_user.admin? %>
+		launched:
+	<%end%>	
+	<%end%>
+	<div id="container", class="contained"> 
+	<% @items.each do |item| %>	
+		<% if  item.launched == "yes" %>
+			<div class="block">
+				<div class="imgholder">
+					<%= link_to image_tag(item.pictures_url), edit_item_path(:id => item.id)  %> <br />
+				</div>	
+				<strong>
+					<%= link_to item.name, edit_item_path(:id => item.id)	, {:style=>'color:#000000;'} %>
+				</strong>
+				<div class="meta">
+					<%= item.cost.to_f/100 %> $
+				</div> 
+			</div>	
+		<%end%>
+	<% end %>
+	</div>
+
