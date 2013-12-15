@@ -45,7 +45,8 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'omniauth-google'
 gem 'omniauth-identity'
-gem 'omniauth-instagram'
+gem 'omniauth-instagram', :git => 'https://github.com/ropiku/omniauth-instagram.git'
+
 
 
 # Errors logging
