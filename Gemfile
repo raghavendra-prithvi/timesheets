@@ -45,7 +45,7 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'omniauth-google'
 gem 'omniauth-identity'
-gem 'devise'
+
 
 # Errors logging
 gem "airbrake"
