@@ -24,7 +24,7 @@ gem 'rails-observers' # https://github.com/rails/rails-observers
 
 group :development, :test do
   #gem 'pg', '0.12.2'
-  #gem "sqlite3-ruby", "~> 1.3.0", :require => "sqlite3"
+  gem "sqlite3-ruby", "~> 1.3.0", :require => "sqlite3"
   gem 'rspec-rails', '2.11.0'
 end
 
@@ -40,9 +40,8 @@ gem 'jquery-rails', '2.0.2'
 
 gem 'yaml_db'
 group :production do
-  #gem 'pg', '0.12.2'
+  gem 'pg', '0.12.2'
 end
-gem 'pg'
 
 gem 'stripe'
 gem 'omniauth'

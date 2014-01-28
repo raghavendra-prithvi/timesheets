@@ -11,33 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20121002203833) do
+ActiveRecord::Schema.define(version: 20140128215544) do
 
-   create_table "users", :force => true do |t|
+  create_table "identities", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.string   "string"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "password_digest"
     t.string   "remember_token"
     t.string   "avatars"
     t.string   "country"
-    t.boolean  "admin",           :default => false
+    t.boolean  "admin",           default: false
     t.string   "confirmed"
     t.string   "signer"
     t.string   "shares"
     t.string   "provider"
     t.string   "uid"
   end
-  
-  create_table "identities", :force => true do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "password_digest"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
 
 end
