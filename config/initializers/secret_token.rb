@@ -1,7 +1,12 @@
 # Be sure to restart your server when you modify this file.
 
-# Your secret key for verifying the integrity of signed cookies.
+# Your secret key is used for verifying the integrity of signed cookies.
 # If you change this key, all old signed cookies will become invalid!
+
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-MusicFeedApp::Application.config.secret_token = '40dfd9892bb24ab2635f9ab4d8a483f065811eeb93e5edbe31b17e0510fea346efc4ae2f4add27f960fa59b9dec49189a4719cb816e265369f59dc648ab7867c'
+# You can use `rake secret` to generate a secure secret key.
+
+# Make sure your secret_key_base is kept private
+# if you're sharing your code publicly.
+MusicFeedApp::Application.config.secret_key_base = '61280858018b8bdab0c89ada9815d8b218a9509fae1c27a23d2e452dca36c3b462738fc30cbaf86fc9ac1fb9d0c72a50be838bbbf7201f5603ec37b738963b1e'

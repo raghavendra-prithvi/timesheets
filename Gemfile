@@ -1,10 +1,14 @@
 source 'https://rubygems.org'
-gem 'bootstrap-wysihtml5-rails'
 
 
-gem 'rails', '3.2.8'
+gem 'rails', '~>4.0.0'
+
+gem 'dalli'
+gem 'squeel', :git => "git://github.com/ernie/squeel.git"
+gem "ransack", :git => "git://github.com/ernie/ransack.git", :branch => 'rails-4'
+gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
 gem 'bootstrap-sass', '2.0.4'
-gem 'bcrypt-ruby', '3.0.1'
+gem 'bcrypt-ruby', '3.1.2', platform: "ruby"
 gem 'dragonfly', '0.9.12'
 gem 'carrierwave'
 gem 'mini_magick'
@@ -12,6 +16,11 @@ gem 'will_paginate', '~> 3.0'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'json', '1.7.7'
 
+gem 'protected_attributes' # https://github.com/rails/protected_attributes
+gem 'activeresource' # https://github.com/rails/activeresource
+gem 'actionpack-action_caching' # https://github.com/rails/actionpack-action_caching
+gem 'activerecord-session_store' # https://github.com/rails/activerecord-session_store
+gem 'rails-observers' # https://github.com/rails/rails-observers
 
 group :development, :test do
   #gem 'pg', '0.12.2'
@@ -21,18 +30,13 @@ end
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails',   '3.2.5'
-  gem 'coffee-rails', '3.2.2'
-  gem 'uglifier', '1.2.3'
-end
+
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
 
 gem 'jquery-rails', '2.0.2'
 
-group :test do
-  gem 'capybara', '1.1.2'
-  gem 'factory_girl_rails', '4.1.0'
-end
 
 gem 'yaml_db'
 group :production do

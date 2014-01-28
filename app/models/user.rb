@@ -1,22 +1,6 @@
 class User < ActiveRecord::Base
-  belongs_to :signature
-  has_one :petition
-  belongs_to :petition
-  has_many :microposts
-  has_many :friends
-  has_many :payments
-  #has_many :authentications
-  has_one :vote
-  has_one :cart
-  has_many :itempairs
-
-
-  accepts_nested_attributes_for :cart
-
-  attr_accessible :name, :email, :votesleft, :country, :password, :password_confirmation, :remember_token
+attr_accessible :name, :email, :country, :password, :password_confirmation, :remember_token
   #has_secure_password
-  after_initialize :bobo
-
 
 
   #before_save { |user| user.email = email.downcase }
@@ -29,8 +13,7 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }, :if => :not_twitter?
 #  validates :password, presence: true, length: { minimum: 6 }, :on => :create
 #  validates :password_confirmation, presence: true, :on => :create
-  validates :votesleft, presence: true, :numericality =>
-				{ :greater_than_or_equal_to => 0, :less_than_or_equal_to => 3 }
+#  validates :votesleft, presence: true, :numericality =>				{ :greater_than_or_equal_to => 0, :less_than_or_equal_to => 3 }
 
 
 
@@ -72,14 +55,5 @@ class User < ActiveRecord::Base
 
 scope :search_by, lambda {|userid| where(:id => userid) }
 
-private
-def bobo
-  if new_record?
-    self.votesleft ||= 3
-	self.petitioner ||= "no"
-	self.confirmed ||= "false"
-	self.signer ||= "no"
-  end
-end
 
   end

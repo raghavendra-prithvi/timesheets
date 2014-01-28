@@ -1,7 +1,8 @@
+<% if session[:user_id] %>
 <%@user = User.find(session[:user_id]) %>
-<label class="navbar-text pull-right" >Welcome <strong><%= @user.name %></strong> </br> <%=link_to 'Sign Out',signout_url, :method => 'delete' %></label>
+<label class="navbar-text pull-right" >Welcome <strong><%= @user.name %></strong> </br> <%=link_to 'Sign Out','/sessions/destroy', :method => 'delete' %></label>
 
-
+<% end %>
 <%= session[:user_id] %>
 
 
