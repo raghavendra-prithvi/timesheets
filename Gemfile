@@ -15,7 +15,7 @@ gem 'mini_magick'
 gem 'will_paginate', '~> 3.0'
 gem 'bootstrap-will_paginate', '0.0.6'
 gem 'json', '1.7.7'
-
+gem 'sqlite3'
 gem 'protected_attributes' # https://github.com/rails/protected_attributes
 gem 'activeresource' # https://github.com/rails/activeresource
 gem 'actionpack-action_caching' # https://github.com/rails/actionpack-action_caching
@@ -42,7 +42,7 @@ gem 'yaml_db'
 group :production do
   #gem 'pg', '0.12.2'
 end
-gem 'pg'
+#gem 'pg'
 
 gem 'stripe'
 gem 'omniauth'

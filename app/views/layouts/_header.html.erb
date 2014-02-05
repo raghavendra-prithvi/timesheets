@@ -1,3 +1,58 @@
+<head><title>Time Sheets</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+<script src="../bower_components/respond/dest/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-23019901-1']);
+_gaq.push(['_setDomainName', "bootswatch.com"]);
+_gaq.push(['_setAllowLinker', true]);
+_gaq.push(['_trackPageview']);
+(function () {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+
+// Datepicker System
+$(function () {
+$("#datepicker").datepicker({ showOtherMonths: true, selectOtherMonths: true });
+$("#datepicker").datepicker("setDate", "today");
+var selectedDate = $("#datepicker").datepicker("getDate");
+});
+
+// Add and Remove button functionality
+$(document).ready(function () {
+var id = 0;
+	// Add button functionality
+	$("#add").click(function () {
+	id++;
+	var master = $(this).parents("#timeTable");
+	// Get a new row based on the prototype row
+	var prot = master.find("#lastRow").clone();
+	prot.attr("class", "")
+	prot.find(".id").attr("value", id);
+	master.find("tbody").append(prot);
+	});
+	// Remove button functionality
+	$(document).on("click", "#remove", function () {
+	$(this).parents("tr").remove();
+	});
+});
+</script>
+</head>
+
 <header class="navbar navbar-fixed-top" id="shadow">
 	<div class="navbar-inner">
 		<% if !current_page? root_path %>
